@@ -1,0 +1,35 @@
+<div class="task-list__container">
+  <ul class="task-list">
+
+    <!--<ng-container *ngIf="">-->
+    <li class="task-list__item">
+
+      <fa-icon class="item__icon-complete"
+               [icon]="faCompleteIcon">
+      </fa-icon>
+
+
+      <label class="item__title">
+        <input type="text"
+               class="item__title__input">
+      </label>
+
+      <button class="refactors-button">
+        <fa-icon [icon]="faEdit">
+        </fa-icon>
+      </button>
+
+      <button class="refactors-button">
+        <fa-icon [icon]="faDelete">
+        </fa-icon>
+      </button>
+
+    </li>
+
+    <!--</ng-container>-->
+    <ng-template #noLists>
+      <p class="no-list-paragraph">No Lists</p>
+    </ng-template>
+
+  </ul>
+</div>

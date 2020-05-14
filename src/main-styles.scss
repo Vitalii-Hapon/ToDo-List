@@ -1,0 +1,28 @@
+// this is where we put global styles and change variable values
+
+// Import Fonts (Lato and Nunito)
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700|Nunito:400,700&display=swap" rel="stylesheet');
+
+$mildColor: #FF4300;
+$borderColor: #104A6B;
+$darkColor: #BABABA;
+$textColor: #1C0D2F;
+$tasksContainerColor: #e9e9e9;
+$lightColor: #FF5A10	;
+
+// Global variables
+$primaryFontFamily: "Nunito", sans-serif;
+
+// Component variables
+$borderWidth: 2px;
+
+//Set custom global styles
+
+html {
+  background: linear-gradient(to left top, $lightColor, $mildColor);
+}
+
+html, body {
+  height: 100%;
+  font-family: $primaryFontFamily;
+}
