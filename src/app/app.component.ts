@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +7,4 @@ import {faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 })
 export class AppComponent {
   title = 'ToDo-List';
-  faEdit = faTrashAlt;
 }

@@ -1,35 +1,47 @@
 <div class="task-list__container">
-  <ul class="task-list">
+  <ul class="task-list"
+      *ngIf="formArray.length; else noTasks">
 
-    <!--<ng-container *ngIf="">-->
-    <li class="task-list__item">
+    <li class="task-list__item"
+        *ngFor="let task of formArray.controls;
+        let i = index" [formGroup]="task"
+        [class.task-list__item--completed]="!tasks[i].completed"
+        (click)="onComplete(i)">
 
-      <fa-icon class="item__icon-complete"
-               [icon]="faCompleteIcon">
-      </fa-icon>
+      <input type="checkbox"
+             class="item__checkbox"
+             formControlName="completed">
 
+      <input type="text"
+             class="item__input"
+             formControlName="title">
 
-      <label class="item__title">
-        <input type="text"
-               class="item__title__input">
-      </label>
+      <span class="item__date">
+        {{getTask(i).date | date: 'MMM d, y'}}
+        </span>
 
-      <button class="refactors-button">
-        <fa-icon [icon]="faEdit">
-        </fa-icon>
-      </button>
-
-      <button class="refactors-button">
+      <button class="refactors-button"
+              type="button"
+              (click)="onDelete(i)">
         <fa-icon [icon]="faDelete">
         </fa-icon>
       </button>
 
     </li>
+    <!--&lt;!&ndash;<fa-icon class="item__icon-complete"&ndash;&gt;-->
+    <!--&lt;!&ndash;[icon]="faCheck"&ndash;&gt;-->
+    <!--&lt;!&ndash;*ngIf="task.completed; else NoCompleted">&ndash;&gt;-->
+    <!--&lt;!&ndash;</fa-icon>&ndash;&gt;-->
 
-    <!--</ng-container>-->
-    <ng-template #noLists>
-      <p class="no-list-paragraph">No Lists</p>
-    </ng-template>
-
+    <!--&lt;!&ndash;<ng-template #NoCompleted>&ndash;&gt;-->
+    <!--&lt;!&ndash;<fa-icon class="item__icon-complete"&ndash;&gt;-->
+    <!--&lt;!&ndash;[icon]="faNoCheck">&ndash;&gt;-->
+    <!--&lt;!&ndash;</fa-icon>&ndash;&gt;-->
+    <!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
   </ul>
+
+  <ng-template #noTasks>
+    <p class="no-list-paragraph">No Tasks</p>
+  </ng-template>
+
 </div>
