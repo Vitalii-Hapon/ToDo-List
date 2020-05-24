@@ -1,24 +1,24 @@
 export interface ITask {
-  id: number;
+  id: string;
   title: string;
-  completed: boolean;
   date: string;
+  completed: boolean;
 }
 
 export class TaskModel implements ITask {
-  id: number;
+  id: string;
   title: string;
-  completed: boolean;
   date: string;
+  completed: boolean;
 
   constructor({
-                id = null,
+                id = '',
                 title = 'new',
                 completed = false,
                 date = new Date().toISOString()
               }) {
     this.id = id;
-    this.title = title;
+    this.title = title.toUpperCase();
     this.completed = completed;
     this.date = date;
   }

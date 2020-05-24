@@ -1,26 +1,18 @@
 @import '~src/main-styles.scss';
 
 :host {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-}
-
-.task-list__container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  max-width: 60vw;
-  max-height: 50vw;
+  width: 50vw;
+  height: 40vw;
   border-radius: 10px;
-  flex-direction: column;
+  padding: 0 20px;
   background-color: $tasksContainerColor;
   border: $borderWidth solid $borderColor;
   color: $textColor;
   overflow: auto;
+
 }
 
 .task-list {
@@ -28,8 +20,9 @@
   flex-direction: column;
   margin-top: 15px;
   color: $textColor;
-  padding: 0 20px;
   list-style: none;
+  width: 100%;
+  padding: 0;
 }
 
 .task-list__item {
@@ -38,24 +31,26 @@
   min-height: 35px;
   padding: 0 10px;
   border-radius: 15px;
-  text-decoration: line-through;
-  opacity: 0.8;
+  opacity: 0.75;
 
   &:hover {
     box-shadow: 0 0 0 $borderWidth $borderColor;
-    transform: scale(1.02);
-  }
-
-  &:active {
-    background-color: $darkColor;
-    color: $textColor;
-    transform: scale(0.98);
+    transform: scale(1.01);
     opacity: 1;
   }
 }
 
 .task-list__item--completed {
-  text-decoration: none;
+  text-decoration: line-through;
+}
+
+.item__check-icon-folder {
+  cursor: pointer;
+}
+
+.item__checkbox {
+  width: 0;
+  height: 0;
 }
 
 .item__icon-complete {
@@ -70,14 +65,13 @@
   color: $mildColor;
 }
 
-
 .item__input {
   border: 0;
   outline: none;
   background-color: $tasksContainerColor;
   width: 30vw;
   border-radius: 10px;
-  margin-left: 15px;
+  margin-left: 35px;
   padding: 0 10px;
 
   &:active {
@@ -87,20 +81,15 @@
   &:enabled {
     background-color: lighten($tasksContainerColor, 50%);
   }
-
-  &:enabled:active  {
-    background-color: $darkColor;
-  }
 }
 
-.task-list__item:active .item__input:enabled {
-  background-color: $darkColor;
+.item__input--new-item {
+  margin-left: 51px;
 }
 
 .item__date {
   font-size: 12px;
-  margin-left: auto;
-  //margin-right: 15px;
+  margin: 0 auto;
 }
 
 .task-list__item:active .item__title__input {
@@ -109,14 +98,12 @@
 
 .refactors-button {
   outline: none;
-  border: $borderWidth solid $borderColor;
   border-radius: 5px;
   cursor: pointer;
   width: 25px;
   height: 25px;
   display: flex;
   justify-content: center;
-  visibility: hidden;
   margin-left: 10px;
 
   &:hover {
@@ -130,12 +117,19 @@
 }
 
 .task-list__item:hover .refactors-button {
-  visibility: visible;
+  border: $borderWidth solid $borderColor;
 }
 
-.task-list__item:active .refactors-button {
-  color: $textColor;
-  background-color: $mildColor;
+.refactors-button--add-button {
+  margin-left: auto;
+}
+
+.item__input:disabled ~ .refactors-button--complete-edit-button {
+  display: none;
+}
+
+.item__input:enabled ~ .refactors-button--edit-button {
+  display: none;
 }
 
 .no-list-paragraph {

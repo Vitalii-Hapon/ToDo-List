@@ -7,29 +7,36 @@ import {map} from 'rxjs/operators';
 @Injectable({providedIn: 'root'})
 
 export class TasksService {
-  readonly ROOT_URL = 'https://jsonplaceholder.typicode.com/todos?_limit=10';
+  readonly ROOT_URL = 'https://jsonplaceholder.typicode.com/todos';
 
   constructor(private http: HttpClient) {
   }
 
-  getTasks(): Observable<TaskModel[]> {
-    return this.http
-      .get<ITask[]>(this.ROOT_URL)
-      .pipe(
-        map((response: ITask[]) => {
-          return response.map((task) => new TaskModel(task));
-        })
-      );
+  //  getTasks(): Observable<TaskModel[]> {
+  //     return this.http
+  //       .get<ITask[]>(this.ROOT_URL)
+  //       .pipe(
+  //         map((response: ITask[]) => {
+  //           return response.map((task) => new TaskModel(task));
+  //         })
+  //       );
+  //   }
 
+  getTasks(): Observable<any> {
+    return this.http
+      .get<any>('https://angular-organizer-8e851.firebaseio.com/.json')
+      .pipe(
+        map((response) => {
+          return Object.values(response).map(object => {
+            return Object.keys(object).map(key => ({...object[key], id: key}));
+          });
+        }));
   }
 
-
-  // onDelete(id: number) {
-  //   this.tasks = this.tasks.filter(item => item.id !== id);
-  // }
-  //
-  // onComplete(id: number) {
-  //   const idx = this.tasks.findIndex(item => item.id === id);
-  //   this.tasks[idx].completed = !this.tasks[idx].completed;
-  // }
+  onDelete(idx: number) {
+    this.http.delete(this.ROOT_URL + `/${idx}`)
+      .subscribe(response => {
+        console.log(response);
+      });
+  }
 }
