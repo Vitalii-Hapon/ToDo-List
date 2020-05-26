@@ -50,8 +50,7 @@ export class TaskListComponent implements OnInit {
     this.tasksService
       .getTasks()
       .pipe(delay(1500))
-      .subscribe((array) => {
-        const tasks = array.reduce((a, b) => a.concat(b), []);
+      .subscribe((tasks) => {
         tasks.forEach(_ => {
           this.formArray.push(this.addFormGroup());
         });
