@@ -1,39 +1,44 @@
 <p> ToDO list</p>
 
-<ul class="task-list">
-    <!--*ngIf="!loading; else Loading">-->
+<ul class="task-list" *ngIf="!loading; else Loading">
 
-  <li class="task-list__item">
+  <li class="task-list__item" [formGroup]="newTask">
+
     <input class="item__input item__input--new-item"
            type="text"
            placeholder="new task..."
+           formControlName="title">
 
-           [formControl]="formControl">
+    <input class="item__input item__input--new-date"
+           type="text"
+           formControlName="date">
 
     <button class="refactors-button refactors-button--add-button"
             type="button"
-            (click)="onAddTask()">
+            (click)="onAddTask(newTask.value)">
       <fa-icon [icon]="faPlus">
       </fa-icon>
     </button>
+
   </li>
 
-  <!--<ng-container *ngIf="formArray.length; else noTasks">-->
+  <ng-container *ngIf="formArray.length; else noTasks">
 
     <li class="task-list__item"
         *ngFor="let task of formArray.controls; let i = index"
         [formGroup]="task"
-        [class.task-list__item--completed]="this.formArray.controls[i].value.completed">
+        [class.task-list__item--completed]="task.value.completed">
 
       <label class="item__check-icon-folder"
-             (click)="onComplete(i)">
+             (click)="toggleComplete(task.value)">
 
         <input class="item__checkbox"
                type="checkbox"
                formControlName="completed">
 
-        <fa-icon *ngIf="this.formArray.controls[i].value.completed; else NoCheck"
+        <fa-icon *ngIf="task.value.completed; else NoCheck"
                  [icon]="faCheck">
+
         </fa-icon>
 
         <ng-template #NoCheck>
@@ -48,42 +53,38 @@
              formControlName="title">
 
       <input type="text"
-             class="item__input"
+             class="item__input item__input--date"
              formControlName="date">
-
-      <!--<span class="item__date">-->
-        <!--{{getTaskDate(i).date | date: 'MMM d, y'}}-->
-        <!--</span>-->
 
       <button class="refactors-button refactors-button--complete-edit-button"
               type="button"
-              (click)="onCompleteEdit(task)">
+              (click)="onFinishEdit(task.value)">
         <fa-icon [icon]="faComplete">
         </fa-icon>
       </button>
 
       <button class="refactors-button refactors-button--edit-button"
               type="button"
-              (click)="onEdit()">
+              (click)="onEdit(task.value)">
         <fa-icon [icon]="faEdit">
         </fa-icon>
       </button>
 
       <button class="refactors-button"
               type="button"
-              (click)="onDelete(i)">
+              (click)="onDelete(task.value)">
         <fa-icon [icon]="faDelete">
         </fa-icon>
       </button>
     </li>
 
-  <!--</ng-container>-->
+  </ng-container>
 </ul>
 
-<!--<ng-template #Loading>-->
-  <!--<p class="no-list-paragraph">Loading...</p>-->
-<!--</ng-template>-->
+<ng-template #Loading>
+  <p class="no-list-paragraph">Loading...</p>
+</ng-template>
 
-<!--<ng-template #noTasks>-->
-  <!--<p class="no-list-paragraph">No Tasks</p>-->
-<!--</ng-template>-->
+<ng-template #noTasks>
+  <p class="no-list-paragraph">No Tasks</p>
+</ng-template>

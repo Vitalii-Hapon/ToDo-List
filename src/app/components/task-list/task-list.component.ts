@@ -3,10 +3,9 @@ import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg
 import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {TaskModel} from '../../core/models/task-model';
+import {ITask} from '../../core/models/task-model';
 import {faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
-import {delay} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {delay, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-task-list',
@@ -22,27 +21,32 @@ export class TaskListComponent implements OnInit {
   faDelete = faTrashAlt;
   faPlus = faPlus;
   faComplete = faCheck;
-  //
+  // variables
   loading = true;
+  disabled = true;
+  tasks: ITask[] = [];
+  // form
   formArray = new FormArray([]);
-  tasks: TaskModel[] = [];
-  formControl = new FormControl('');
-  updateTask$ = new Subject();
+  newTask = new FormGroup({
+    id: new FormControl(''),
+    title: new FormControl(''),
+    date: new FormControl(''),
+    completed: new FormControl('')
+  });
 
   constructor(private tasksService: TasksService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.uploadTasks();
-    // this.formArray.valueChanges.subscribe(value => (this.tasks = value));
   }
 
   addFormGroup(): FormGroup {
     return this.fb.group({
       id: '',
       title: '',
-      completed: false,
-      date: ''
+      date: '',
+      completed: false
     });
   }
 
@@ -60,31 +64,31 @@ export class TaskListComponent implements OnInit {
       });
   }
 
-  onAddTask() {
-    this.formArray.push(this.addFormGroup());
+  toggleComplete(task: ITask) {
+    this.tasksService.toggleCompleted(task).subscribe(
+      response => {
+      }, err => console.log(err));
   }
 
-  getTaskDate(i): TaskModel {
-    return this.tasks[i];
+  onAddTask(task: ITask) {
+    console.log(task);
+    // this.formArray.push(this.addFormGroup());
   }
 
-  onComplete(i: number) {
-    console.log(this.tasks);
-    console.log(this.tasks[i].completed);
+  onDelete(task: ITask) {
+    this.tasksService.onDelete(task).subscribe(response => {
+      this.formArray.controls = this.formArray.controls.filter(
+        item => item.value.id !== task.id
+      );
+    }, err => console.log(err));
   }
 
-  onDelete(i: number) {
-    this.tasksService.onDelete(i);
-    this.formArray.removeAt(i);
+  onEdit(task: ITask) {
   }
 
-  onEdit() {
+  onFinishEdit(task: ITask) {
+    this.tasksService.onEdit(task).subscribe(
+      response => {
+      }, err => console.log(err));
   }
-
-  onCompleteEdit(task: FormGroup) {
-    this.updateTask$.next(task.value);
-    console.log(task.value);
-  }
-
-
 }

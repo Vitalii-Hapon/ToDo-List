@@ -26,10 +26,20 @@ export class TasksService {
         }));
   }
 
-  onDelete(idx: number) {
-    this.http.delete(this.ROOT_URL + `/${idx}`)
-      .subscribe(response => {
-        console.log(response);
-      });
+  toggleCompleted(task: ITask) {
+    return this.http
+      .patch<void>(`${this.ROOT_URL}/${task.date}/${task.id}.json`,
+        {completed: !task.completed});
+  }
+
+  onEdit(task: ITask) {
+    return this.http
+      .patch<ITask>(`${this.ROOT_URL}/${task.date}/${task.id}.json`,
+        {title: task.title, date: task.date});
+  }
+
+  onDelete(task: ITask) {
+    return this.http
+      .delete<void>(`${this.ROOT_URL}/${task.date}/${task.id}.json`);
   }
 }

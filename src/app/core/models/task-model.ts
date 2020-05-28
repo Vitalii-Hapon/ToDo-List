@@ -19,7 +19,7 @@ export class TaskModel implements ITask {
               }) {
     this.id = id;
     this.title = title.toUpperCase();
-    this.completed = completed;
     this.date = date;
+    this.completed = completed;
   }
 }

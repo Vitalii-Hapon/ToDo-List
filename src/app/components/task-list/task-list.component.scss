@@ -27,6 +27,7 @@
 
 .task-list__item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   min-height: 35px;
   padding: 0 10px;
@@ -45,10 +46,13 @@
 }
 
 .item__check-icon-folder {
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 
 .item__checkbox {
+  margin: 0;
   width: 0;
   height: 0;
 }
@@ -69,9 +73,8 @@
   border: 0;
   outline: none;
   background-color: $tasksContainerColor;
-  width: 30vw;
+  width: 35vw;
   border-radius: 10px;
-  margin-left: 35px;
   padding: 0 10px;
 
   &:active {
@@ -83,13 +86,18 @@
   }
 }
 
-.item__input--new-item {
-  margin-left: 51px;
+.item__input--date {
+  width: 5vw;
 }
 
-.item__date {
-  font-size: 12px;
-  margin: 0 auto;
+.item__input--new-date {
+  width: 5vw;
+  margin-left: 1.3vw;
+  margin-right: 1.2vw;
+}
+
+.item__input--new-item {
+  margin-left: 1.85vw;
 }
 
 .task-list__item:active .item__title__input {
@@ -104,7 +112,7 @@
   height: 25px;
   display: flex;
   justify-content: center;
-  margin-left: 10px;
+  align-items: center;
 
   &:hover {
     color: $textColor;
@@ -121,7 +129,7 @@
 }
 
 .refactors-button--add-button {
-  margin-left: auto;
+  margin-right: 2.25vw;
 }
 
 .item__input:disabled ~ .refactors-button--complete-edit-button {
