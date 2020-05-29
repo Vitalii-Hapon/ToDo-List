@@ -5,6 +5,10 @@ export interface ITask {
   completed: boolean;
 }
 
+export interface ITaskId {
+  name: string;
+}
+
 export class TaskModel implements ITask {
   id: string;
   title: string;

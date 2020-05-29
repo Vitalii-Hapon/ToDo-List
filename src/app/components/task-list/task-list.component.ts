@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ITask} from '../../core/models/task-model';
 import {faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {delay, switchMap} from 'rxjs/operators';
@@ -23,15 +23,13 @@ export class TaskListComponent implements OnInit {
   faComplete = faCheck;
   // variables
   loading = true;
-  disabled = true;
-  tasks: ITask[] = [];
   // form
   formArray = new FormArray([]);
   newTask = new FormGroup({
     id: new FormControl(''),
-    title: new FormControl(''),
-    date: new FormControl(''),
-    completed: new FormControl('')
+    title: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    completed: new FormControl({value: false}),
   });
 
   constructor(private tasksService: TasksService, private fb: FormBuilder) {
@@ -44,9 +42,9 @@ export class TaskListComponent implements OnInit {
   addFormGroup(): FormGroup {
     return this.fb.group({
       id: '',
-      title: '',
-      date: '',
-      completed: false
+      title: new FormControl({value: '', disabled: true}, Validators.required),
+      date: new FormControl({value: '', disabled: true}, Validators.required),
+      completed: new FormControl({value: false}),
     });
   }
 
@@ -59,36 +57,43 @@ export class TaskListComponent implements OnInit {
           this.formArray.push(this.addFormGroup());
         });
         this.formArray.patchValue(tasks);
-        this.tasks = tasks;
         this.loading = false;
       });
   }
 
-  toggleComplete(task: ITask) {
-    this.tasksService.toggleCompleted(task).subscribe(
+  toggleComplete(task: FormGroup) {
+    this.tasksService.toggleCompleted(task.getRawValue()).subscribe(
       response => {
       }, err => console.log(err));
   }
 
   onAddTask(task: ITask) {
-    console.log(task);
-    // this.formArray.push(this.addFormGroup());
+    this.tasksService.onAddTask(task).subscribe(
+      taskResponse => {
+        this.addFormGroup().patchValue(taskResponse);
+        this.formArray.push(this.addFormGroup());
+      }, err => console.log(err)
+    );
   }
 
-  onDelete(task: ITask) {
-    this.tasksService.onDelete(task).subscribe(response => {
+  onDelete(task: FormGroup, i: number) {
+    this.tasksService.onDelete(task.getRawValue()).subscribe(response => {
       this.formArray.controls = this.formArray.controls.filter(
-        item => item.value.id !== task.id
+        (item, idx) => idx !== i
       );
     }, err => console.log(err));
   }
 
-  onEdit(task: ITask) {
+  onEdit(i: number) {
+    console.log(this.formArray.controls);
+    this.formArray.controls[i].enable();
   }
 
-  onFinishEdit(task: ITask) {
-    this.tasksService.onEdit(task).subscribe(
+  onFinishEdit(task: FormGroup, i ) {
+    this.tasksService.onEdit(task.getRawValue()).subscribe(
       response => {
+        this.formArray.controls[i].get('title').disable();
+        this.formArray.controls[i].get('date').disable();
       }, err => console.log(err));
   }
 }

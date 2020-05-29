@@ -15,7 +15,8 @@
 
     <button class="refactors-button refactors-button--add-button"
             type="button"
-            (click)="onAddTask(newTask.value)">
+            (click)="onAddTask(newTask.value)"
+            [disabled]="newTask.invalid">
       <fa-icon [icon]="faPlus">
       </fa-icon>
     </button>
@@ -30,7 +31,7 @@
         [class.task-list__item--completed]="task.value.completed">
 
       <label class="item__check-icon-folder"
-             (click)="toggleComplete(task.value)">
+             (click)="toggleComplete(task)">
 
         <input class="item__checkbox"
                type="checkbox"
@@ -58,21 +59,21 @@
 
       <button class="refactors-button refactors-button--complete-edit-button"
               type="button"
-              (click)="onFinishEdit(task.value)">
+              (click)="onFinishEdit(task, i)">
         <fa-icon [icon]="faComplete">
         </fa-icon>
       </button>
 
       <button class="refactors-button refactors-button--edit-button"
               type="button"
-              (click)="onEdit(task.value)">
+              (click)="onEdit(i)">
         <fa-icon [icon]="faEdit">
         </fa-icon>
       </button>
 
       <button class="refactors-button"
               type="button"
-              (click)="onDelete(task.value)">
+              (click)="onDelete(task, i)">
         <fa-icon [icon]="faDelete">
         </fa-icon>
       </button>
