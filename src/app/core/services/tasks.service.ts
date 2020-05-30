@@ -24,24 +24,24 @@ export class TasksService {
         }));
   }
 
-  toggleCompleted(task: ITask) {
+  toggleCompleted(task: ITask): Observable<void> {
     return this.http
       .patch<void>(`${this.ROOT_URL}/${task.id}.json`,
         {completed: !task.completed});
   }
 
-  onEdit(task: ITask) {
+  onEdit(task: ITask): Observable<void> {
     return this.http
-      .patch<ITask>(`${this.ROOT_URL}/${task.id}.json`,
+      .patch<void>(`${this.ROOT_URL}/${task.id}.json`,
         {title: task.title, date: task.date});
   }
 
-  onDelete(task: ITask) {
+  onDelete(task: ITask): Observable<void> {
     return this.http
       .delete<void>(`${this.ROOT_URL}/${task.id}.json`);
   }
 
-  onAddTask(task: ITask) {
+  onAddTask(task: ITask): Observable<ITask> {
     return this.http
       .post<ITaskId>(`${this.ROOT_URL}.json`, task)
       .pipe(map(response => {

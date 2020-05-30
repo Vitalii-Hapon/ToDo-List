@@ -2,7 +2,7 @@
 
 <ul class="task-list" *ngIf="!loading; else Loading">
 
-  <li class="task-list__item" [formGroup]="newTask">
+  <form class="task-list__item" [formGroup]="newTask">
 
     <input class="item__input item__input--new-item"
            type="text"
@@ -14,14 +14,14 @@
            formControlName="date">
 
     <button class="refactors-button refactors-button--add-button"
-            type="button"
-            (click)="onAddTask(newTask.value)"
+            type="submit"
+            (click)="onAddTask(newTask)"
             [disabled]="newTask.invalid">
       <fa-icon [icon]="faPlus">
       </fa-icon>
     </button>
 
-  </li>
+  </form>
 
   <ng-container *ngIf="formArray.length; else noTasks">
 

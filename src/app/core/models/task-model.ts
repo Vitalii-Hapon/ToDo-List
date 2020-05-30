@@ -1,5 +1,5 @@
 export interface ITask {
-  id: string;
+  id?: string;
   title: string;
   date: string;
   completed: boolean;
@@ -10,7 +10,7 @@ export interface ITaskId {
 }
 
 export class TaskModel implements ITask {
-  id: string;
+  id?: string;
   title: string;
   date: string;
   completed: boolean;
