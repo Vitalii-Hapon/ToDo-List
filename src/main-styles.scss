@@ -22,8 +22,8 @@ html {
   background: linear-gradient(to left top, $lightColor, $mildColor);
 }
 
-html, body {
-  height: 100%; font-family: $primaryFontFamily;
+html, body, p {
+  font-family: $primaryFontFamily;
 }
 
 input {

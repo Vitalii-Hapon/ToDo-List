@@ -2,7 +2,7 @@
 
 <ul class="task-list" *ngIf="!loading; else Loading">
 
-  <form class="task-list__item" [formGroup]="newTask">
+  <mat-form-field class="task-list__item" [formGroup]="newTask">
 
     <input class="item__input item__input--new-item"
            type="text"
@@ -10,8 +10,15 @@
            formControlName="title">
 
     <input class="item__input item__input--new-date"
-           type="text"
+           type="date"
            formControlName="date">
+
+    <!--<mat-form-field>-->
+      <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date">-->
+      <!--<mat-datepicker #picker></mat-datepicker>-->
+    <!--</mat-form-field>-->
+
+    <!--<button mat-raised-button (click)="picker.open()">Open</button>-->
 
     <button class="refactors-button refactors-button--add-button"
             type="submit"
@@ -21,7 +28,7 @@
       </fa-icon>
     </button>
 
-  </form>
+  </mat-form-field>
 
   <ng-container *ngIf="formArray.length; else noTasks">
 
@@ -53,12 +60,12 @@
              class="item__input"
              formControlName="title">
 
-      <input type="text"
+      <input type="date"
              class="item__input item__input--date"
              formControlName="date">
 
       <button class="refactors-button refactors-button--complete-edit-button"
-              type="button"
+              type="submit"
               (click)="onFinishEdit(task, i)">
         <fa-icon [icon]="faComplete">
         </fa-icon>
@@ -82,8 +89,9 @@
   </ng-container>
 </ul>
 
-<ng-template #Loading>
-  <p class="no-list-paragraph">Loading...</p>
+<ng-template #Loading class="no-list-paragraph">
+  <mat-spinner></mat-spinner>
+  <p >Loading...</p>
 </ng-template>
 
 <ng-template #noTasks>

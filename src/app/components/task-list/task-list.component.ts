@@ -43,7 +43,7 @@ export class TaskListComponent implements OnInit {
       id: new FormControl(''),
       title: new FormControl({value: '', disabled: true}, Validators.required),
       date: new FormControl({value: '', disabled: true}, Validators.required),
-      completed: new FormControl(''),
+      completed: new FormControl(false),
     });
   }
 
@@ -52,7 +52,7 @@ export class TaskListComponent implements OnInit {
       id: new FormControl(`${task.id}`),
       title: new FormControl({value: `${task.title}`, disabled: true}, Validators.required),
       date: new FormControl({value: `${task.date}`, disabled: true}, Validators.required),
-      completed: new FormControl(task.completed),
+      completed: new FormControl(false),
     });
   }
 

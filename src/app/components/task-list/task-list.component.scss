@@ -7,12 +7,11 @@
   width: 50vw;
   height: 40vw;
   border-radius: 10px;
-  padding: 0 20px;
+  padding: 15px 20px;
   background-color: $tasksContainerColor;
   border: $borderWidth solid $borderColor;
   color: $textColor;
   overflow: auto;
-
 }
 
 .task-list {
@@ -73,7 +72,7 @@
   border: 0;
   outline: none;
   background-color: $tasksContainerColor;
-  width: 35vw;
+  width: 25vw;
   border-radius: 10px;
   padding: 0 10px;
 
@@ -87,11 +86,11 @@
 }
 
 .item__input--date {
-  width: 5vw;
+  width: 10vw;
 }
 
 .item__input--new-date {
-  width: 5vw;
+  width: 10vw;
   margin-left: 1.3vw;
   margin-right: 1.2vw;
 }
@@ -142,4 +141,10 @@
 
 .no-list-paragraph {
   text-align: center;
+}
+
+.no-list-paragraph > mat-spinner {
+  width: 20px;
+  height: 20px;
+  color: $lightColor;
 }
