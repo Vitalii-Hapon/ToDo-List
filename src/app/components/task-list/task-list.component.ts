@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
-import {delay} from 'rxjs/operators';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {delay, map} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
+import {Observable, Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
@@ -13,8 +14,9 @@ import {ITask} from '../../core/models/task-model';
   styleUrls: ['./task-list.component.scss']
 })
 
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   // import font awesome icons
+  faSearch = faSearch;
   faNoCheck = faCircle;
   faCheck = faCheckCircle;
   faEdit = faEdit;
@@ -23,26 +25,49 @@ export class TaskListComponent implements OnInit {
   faComplete = faCheck;
   // variables
   loading = true;
+  tasks: Observable<AbstractControl[]>;
   // form
+  searchInput = new FormControl('');
   formArray = new FormArray([]);
-  newTask = new FormGroup({
+  newTask = this.fb.group({
     title: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
-    completed: new FormControl(false),
+    completed: false
   });
+  subscription: Subscription;
+  private ngUnsubscribe = new Subject();
 
   constructor(private tasksService: TasksService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
-    this.uploadTasks();
+    this.getTasks();
+    // this.searchInput.valueChanges
+    //   .pipe(
+    //     takeUntil(this.ngUnsubscribe)
+    //   )
+    //   .subscribe(value => {
+    //     if (!value.toString().trim()) {
+    //       return this.tasks = this.formArray.controls;
+    //     } else {
+    //       return this.tasks = this.formArray.controls.filter(task => {
+    //         return task.get('title').value.toString().indexOf(value.toString()) !== -1;
+    //       });
+    //     }
+    //   });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   addFormGroup(): FormGroup {
     return this.fb.group({
       id: new FormControl(''),
-      title: new FormControl({value: '', disabled: true}, Validators.required),
-      date: new FormControl({value: '', disabled: true}, Validators.required),
+      title: [{value: '', disabled: true}, Validators.required],
+      date: [{value: '', disabled: true}, Validators.required],
       completed: new FormControl(false),
     });
   }
@@ -56,17 +81,20 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  uploadTasks() {
-    this.tasksService
+  getTasks() {
+    this.tasks = this.tasksService
       .getTasks()
-      .pipe(delay(1500))
-      .subscribe((tasks) => {
-        tasks.forEach(_ => {
-          this.formArray.push(this.addFormGroup());
-        });
-        this.formArray.patchValue(tasks);
-        this.loading = false;
-      });
+      .pipe(
+        delay(500),
+        map((tasks) => {
+          tasks.forEach(_ => {
+            this.formArray.push(this.addFormGroup());
+          });
+          this.formArray.patchValue(tasks);
+          this.loading = false;
+          return this.formArray.controls;
+        })
+      );
   }
 
   toggleComplete(task: FormGroup) {
@@ -80,9 +108,8 @@ export class TaskListComponent implements OnInit {
     this.tasksService.onAddTask(task.value).subscribe(
       taskResponse => {
         this.formArray.push(this.newTaskGroup(taskResponse));
-        // this.formArray.push(this.addFormGroup());
-        // this.formArray.controls[length].patchValue(taskResponse);
         this.newTask.reset();
+        // this.tasks = this.formArray.controls;
       }, err => console.log(err)
     );
   }
@@ -92,6 +119,7 @@ export class TaskListComponent implements OnInit {
       this.formArray.controls = this.formArray.controls.filter(
         (item, idx) => idx !== i
       );
+      // this.tasks = this.formArray.controls;
     }, err => console.log(err));
   }
 
@@ -105,5 +133,9 @@ export class TaskListComponent implements OnInit {
         this.formArray.controls[i].get('title').disable();
         this.formArray.controls[i].get('date').disable();
       }, err => console.log(err));
+  }
+
+  taskState(value: boolean): any {
+    return value ? this.faCheck : this.faNoCheck;
   }
 }

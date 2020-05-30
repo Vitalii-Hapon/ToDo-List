@@ -10,11 +10,14 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { FilterPipe } from './shared/pipes/filter.pipe';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TaskListComponent
+    TaskListComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -23,6 +26,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     HttpClientModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
   ],

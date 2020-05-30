@@ -1,39 +1,53 @@
-<p> ToDO list</p>
+<h1> ToDO list</h1>
 
-<ul class="task-list" *ngIf="!loading; else Loading">
 
-  <mat-form-field class="task-list__item" [formGroup]="newTask">
+<form class="task-list__item" [formGroup]="newTask">
 
-    <input class="item__input item__input--new-item"
-           type="text"
-           placeholder="new task..."
-           formControlName="title">
+  <fa-icon [icon]="faSearch"></fa-icon>
 
-    <input class="item__input item__input--new-date"
-           type="date"
-           formControlName="date">
+  <input class="item__input input--search"
+         type="text"
+         placeholder="type text..."
+         [formControl]="searchInput">
 
-    <!--<mat-form-field>-->
-      <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date">-->
-      <!--<mat-datepicker #picker></mat-datepicker>-->
-    <!--</mat-form-field>-->
+</form>
 
-    <!--<button mat-raised-button (click)="picker.open()">Open</button>-->
+<form class="task-list__item" [formGroup]="newTask">
 
-    <button class="refactors-button refactors-button--add-button"
-            type="submit"
-            (click)="onAddTask(newTask)"
-            [disabled]="newTask.invalid">
-      <fa-icon [icon]="faPlus">
-      </fa-icon>
-    </button>
+  <input class="item__input item__input--new-item"
+         type="text"
+         placeholder="new task..."
+         formControlName="title">
 
-  </mat-form-field>
+  <input class="item__input item__input--new-date"
+         type="date"
+         formControlName="date">
 
-  <ng-container *ngIf="formArray.length; else noTasks">
+  <!--<mat-form-field>-->
+  <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date" type="date">-->
+  <!--<mat-datepicker #picker></mat-datepicker>-->
+  <!--</mat-form-field>-->
+
+  <!--<button mat-raised-button (click)="picker.open()">Open</button>-->
+
+  <button class="refactors-button refactors-button--add-button"
+          type="submit"
+          (click)="onAddTask(newTask)"
+          [disabled]="newTask.invalid">
+    <fa-icon [icon]="faPlus">
+    </fa-icon>
+  </button>
+
+</form>
+
+<ul class="task-list">
+  <!--*ngIf="!loading; else Loading">-->
+
+  <ng-container>
+    <!--*ngIf="formArray.length; else noTasks">-->
 
     <li class="task-list__item"
-        *ngFor="let task of formArray.controls; let i = index"
+        *ngFor="let task of tasks | async; let i = index"
         [formGroup]="task"
         [class.task-list__item--completed]="task.value.completed">
 
@@ -44,15 +58,9 @@
                type="checkbox"
                formControlName="completed">
 
-        <fa-icon *ngIf="task.value.completed; else NoCheck"
-                 [icon]="faCheck">
+        <fa-icon [icon]="taskState(task.value.completed)">
 
         </fa-icon>
-
-        <ng-template #NoCheck>
-          <fa-icon [icon]="faNoCheck">
-          </fa-icon>
-        </ng-template>
 
       </label>
 
@@ -91,9 +99,9 @@
 
 <ng-template #Loading class="no-list-paragraph">
   <mat-spinner></mat-spinner>
-  <p >Loading...</p>
+  <h3>Loading...</h3>
 </ng-template>
 
 <ng-template #noTasks>
-  <p class="no-list-paragraph">No Tasks</p>
+  <h3 class="no-list-paragraph">No Tasks</h3>
 </ng-template>
