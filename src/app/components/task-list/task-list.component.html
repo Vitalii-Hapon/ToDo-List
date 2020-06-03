@@ -1,7 +1,7 @@
 <h1> ToDO list</h1>
 
 
-<form class="task-list__item" [formGroup]="newTask">
+<div class="task-list__item">
 
   <fa-icon [icon]="faSearch"></fa-icon>
 
@@ -10,9 +10,9 @@
          placeholder="type text..."
          [formControl]="searchInput">
 
-</form>
+</div>
 
-<form class="task-list__item" [formGroup]="newTask">
+<form class="task-list__item" [formGroup]="newTaskInput">
 
   <input class="item__input item__input--new-item"
          type="text"
@@ -32,8 +32,8 @@
 
   <button class="refactors-button refactors-button--add-button"
           type="submit"
-          (click)="onAddTask(newTask)"
-          [disabled]="newTask.invalid">
+          (click)="onAddTask(newTaskInput)"
+          [disabled]="newTaskInput.invalid">
     <fa-icon [icon]="faPlus">
     </fa-icon>
   </button>
@@ -97,11 +97,11 @@
   </ng-container>
 </ul>
 
-<ng-template #Loading class="no-list-paragraph">
-  <mat-spinner></mat-spinner>
-  <h3>Loading...</h3>
-</ng-template>
+<!--<ng-template #Loading class="no-list-paragraph">-->
+  <!--<mat-spinner></mat-spinner>-->
+  <!--<h3>Loading...</h3>-->
+<!--</ng-template>-->
 
-<ng-template #noTasks>
-  <h3 class="no-list-paragraph">No Tasks</h3>
-</ng-template>
+<!--<ng-template #noTasks>-->
+  <!--<h3 class="no-list-paragraph">No Tasks</h3>-->
+<!--</ng-template>-->

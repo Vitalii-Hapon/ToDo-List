@@ -17,7 +17,6 @@ export class TasksService {
     return this.http
       .get<ITask[]>(`${this.ROOT_URL}.json`)
       .pipe(map(tasks => {
-        console.log(tasks);
         if (!tasks) {
           return [];
         }
