@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {delay, map, takeUntil} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
@@ -25,6 +25,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   faComplete = faCheck;
   // variables
   loading = true;
+  tasks: AbstractControl[];
   // form
   searchInput = new FormControl('');
   formArray = new FormArray([]);
@@ -42,23 +43,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getTasks();
+    this.filterTasks();
 
-    // this.searchInput.valueChanges
-    //   .pipe(
-    //     takeUntil(this.ngUnsubscribe)
-    //   )
-    //   .subscribe(value => {
-    //     if (!value.toString().trim()) {
-    //       return this.tasks;
-    //     } else {
-    //       return this.tasks = this.tasks
-    //         .pipe(
-    //         map( tasks => {
-    //           return tasks.filter( task => {
-    //             return task.get('title').value.toString().indexOf(value.toString().trim()) !== -1;
-    //           });
-    //         })); }
-    //       });
+
   }
 
   ngOnDestroy(): void {
@@ -85,18 +72,19 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   getTasks() {
-   this.tasksService
+    this.tasksService
       .getTasks()
       .pipe(
         takeUntil(this.ngUnsubscribe),
         delay(500))
       .subscribe((tasks) => {
-          tasks.forEach(_ => {
-            this.formArray.push(this.addFormGroup());
-          });
-          this.formArray.patchValue(tasks);
-          this.loading = false;
+        tasks.forEach(_ => {
+          this.formArray.push(this.addFormGroup());
         });
+        this.formArray.patchValue(tasks);
+        this.loading = false;
+        this.tasks = this.formArray.controls;
+      });
   }
 
   toggleComplete(task: FormGroup) {
@@ -105,8 +93,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.ngUnsubscribe))
       .subscribe(
-      response => {
-      }, err => console.log(err));
+        response => {
+        }, err => console.log(err));
   }
 
   onAddTask(task: FormGroup) {
@@ -115,10 +103,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.ngUnsubscribe))
       .subscribe(
-          taskResponse => {
-            this.formArray.push(this.newTaskGroup(taskResponse));
-            this.newTaskInput.reset();
-          }, err => console.log(err));
+        taskResponse => {
+          this.formArray.push(this.newTaskGroup(taskResponse));
+          this.newTaskInput.reset();
+          this.tasks = this.formArray.controls;
+        }, err => console.log(err));
   }
 
   onDelete(task: FormGroup, i: number) {
@@ -127,10 +116,10 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.ngUnsubscribe))
       .subscribe(response => {
-        this.formArray.controls = this.formArray.controls.filter(
-            (item, idx) => idx !== i
-          );
-        }, err => console.log(err));
+        this.tasks = this.formArray.controls.filter(
+          (item, idx) => idx !== i
+        );
+      }, err => console.log(err));
   }
 
   onEdit(i: number) {
@@ -151,5 +140,23 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   taskState(value: boolean): any {
     return value ? this.faCheck : this.faNoCheck;
+  }
+
+  filterTasks() {
+    this.searchInput
+      .valueChanges
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(value => {
+        if (!value.toString().toLowerCase().trim()) {
+          return this.tasks = this.formArray.controls;
+        } else {
+          return this.tasks = this.formArray.controls.filter(task => {
+            return task.get('title').value.toString().indexOf(value.toString()) !== -1;
+          });
+        }
+      });
+
   }
 }

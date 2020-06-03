@@ -8,7 +8,7 @@
   <input class="item__input input--search"
          type="text"
          placeholder="type text..."
-         [formControl]="searchInput">
+        [formControl]="searchInput">
 
 </div>
 
@@ -43,11 +43,10 @@
 <ul class="task-list">
   <!--*ngIf="!loading; else Loading">-->
 
-  <ng-container>
-    <!--*ngIf="formArray.length; else noTasks">-->
+  <ng-container *ngIf="formArray.length; else noTasks">
 
     <li class="task-list__item"
-        *ngFor="let task of formArray.controls; let i = index"
+        *ngFor="let task of tasks; let i = index"
         [formGroup]="task"
         [class.task-list__item--completed]="task.value.completed">
 
@@ -102,6 +101,6 @@
   <!--<h3>Loading...</h3>-->
 <!--</ng-template>-->
 
-<!--<ng-template #noTasks>-->
-  <!--<h3 class="no-list-paragraph">No Tasks</h3>-->
-<!--</ng-template>-->
+<ng-template #noTasks>
+  <h3 class="no-list-paragraph">No Tasks</h3>
+</ng-template>
