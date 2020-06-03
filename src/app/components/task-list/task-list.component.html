@@ -47,7 +47,7 @@
     <!--*ngIf="formArray.length; else noTasks">-->
 
     <li class="task-list__item"
-        *ngFor="let task of tasks | async; let i = index"
+        *ngFor="let task of formArray.controls; let i = index"
         [formGroup]="task"
         [class.task-list__item--completed]="task.value.completed">
 

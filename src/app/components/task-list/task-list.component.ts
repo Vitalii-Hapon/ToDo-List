@@ -2,11 +2,11 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {delay, map, takeUntil} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
@@ -25,7 +25,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
   faComplete = faCheck;
   // variables
   loading = true;
-  tasks: Observable<AbstractControl[]>;
   // form
   searchInput = new FormControl('');
   formArray = new FormArray([]);
@@ -34,7 +33,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     date: ['', Validators.required],
     completed: false
   });
-  // subscription: Subscription;
+  // for subscribe/unsubscribe
   private ngUnsubscribe = new Subject();
 
   constructor(private tasksService: TasksService,
@@ -63,7 +62,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.subscription.unsubscribe();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -87,59 +85,53 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   getTasks() {
-    this.tasks = this.tasksService
+   this.tasksService
       .getTasks()
       .pipe(
-        delay(500),
-        map((tasks) => {
+        takeUntil(this.ngUnsubscribe),
+        delay(500))
+      .subscribe((tasks) => {
           tasks.forEach(_ => {
             this.formArray.push(this.addFormGroup());
           });
           this.formArray.patchValue(tasks);
           this.loading = false;
-          console.log(this.formArray.controls);
-          return this.formArray.controls;
-        })
-      );
+        });
   }
 
   toggleComplete(task: FormGroup) {
-    this.tasksService.toggleCompleted(task.getRawValue()).subscribe(
+    this.tasksService
+      .toggleCompleted(task.getRawValue())
+      .pipe(
+        takeUntil(this.ngUnsubscribe))
+      .subscribe(
       response => {
       }, err => console.log(err));
   }
 
   onAddTask(task: FormGroup) {
-    this.tasksService.onAddTask(task.value)
-      .pipe(takeUntil(this.ngUnsubscribe))
+    this.tasksService
+      .onAddTask(task.value)
+      .pipe(
+        takeUntil(this.ngUnsubscribe))
       .subscribe(
           taskResponse => {
             this.formArray.push(this.newTaskGroup(taskResponse));
             this.newTaskInput.reset();
-            return this.formArray.controls;
           }, err => console.log(err));
   }
 
   onDelete(task: FormGroup, i: number) {
-    this.tasks = this.tasksService.onDelete(task.getRawValue())
+    this.tasksService
+      .onDelete(task.getRawValue())
       .pipe(
-        map(response => {
-          return this.formArray.controls.filter(
+        takeUntil(this.ngUnsubscribe))
+      .subscribe(response => {
+        this.formArray.controls = this.formArray.controls.filter(
             (item, idx) => idx !== i
           );
-        }, err => console.log(err)));
+        }, err => console.log(err));
   }
-
-  // onDelete(task: FormGroup, i: number) {
-  //   this.tasksService.onDelete(task.getRawValue())
-  //     .pipe(takeUntil(this.ngUnsubscribe))
-  //     .subscribe(response => {
-  //       this.formArray.controls.
-  //       return this.formArray.controls = this.formArray.controls.filter(
-  //           (item, idx) => idx !== i
-  //         );
-  //       }, err => console.log(err));
-  // }
 
   onEdit(i: number) {
     this.formArray.controls[i].enable();
