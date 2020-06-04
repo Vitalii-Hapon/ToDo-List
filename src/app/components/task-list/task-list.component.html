@@ -40,8 +40,7 @@
 
 </form>
 
-<ul class="task-list">
-  <!--*ngIf="!loading; else Loading">-->
+<ul class="task-list" *ngIf="!loading; else Loading">
 
   <ng-container *ngIf="formArray.length; else noTasks">
 
@@ -96,10 +95,10 @@
   </ng-container>
 </ul>
 
-<!--<ng-template #Loading class="no-list-paragraph">-->
-  <!--<mat-spinner></mat-spinner>-->
-  <!--<h3>Loading...</h3>-->
-<!--</ng-template>-->
+<ng-template #Loading class="no-list-paragraph">
+  <mat-spinner></mat-spinner>
+  <h3>Loading...</h3>
+</ng-template>
 
 <ng-template #noTasks>
   <h3 class="no-list-paragraph">No Tasks</h3>

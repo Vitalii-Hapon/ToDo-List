@@ -6,7 +6,7 @@ import {AbstractControl} from '@angular/forms';
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(tasks: AbstractControl[], filter: string = ''): any {
+  transform(tasks: AbstractControl[], filter: string = ''): AbstractControl[] {
     if (!filter.toLowerCase().trim()) {
       return tasks;
     } else {

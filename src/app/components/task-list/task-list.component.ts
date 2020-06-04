@@ -7,6 +7,8 @@ import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {delay, map, takeUntil} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
 import {Subject} from 'rxjs';
+import {SpinnerService} from '../../core/services/spinner.service';
+import {async} from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-task-list',
@@ -24,7 +26,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   faComplete = faCheck;
   // variables
-  loading = true;
+  loading: boolean;
   tasks: AbstractControl[];
   // form
   searchInput = new FormControl('');
@@ -38,16 +40,22 @@ export class TaskListComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject();
 
   constructor(private tasksService: TasksService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private spinnerService: SpinnerService) {
   }
 
   ngOnInit(): void {
     this.getTasks();
+    this.showSpinner();
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  showSpinner() {
+    this.loading = this.spinnerService.visibility.value;
   }
 
   addFormGroup(): FormGroup {
