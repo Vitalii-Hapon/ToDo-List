@@ -46,7 +46,7 @@
   <ng-container *ngIf="formArray.length; else noTasks">
 
     <li class="task-list__item"
-        *ngFor="let task of tasks; let i = index"
+        *ngFor="let task of tasks | filter: searchInput.value; let i = index"
         [formGroup]="task"
         [class.task-list__item--completed]="task.value.completed">
 

@@ -43,9 +43,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getTasks();
-    this.filterTasks();
-
-
   }
 
   ngOnDestroy(): void {
@@ -142,21 +139,4 @@ export class TaskListComponent implements OnInit, OnDestroy {
     return value ? this.faCheck : this.faNoCheck;
   }
 
-  filterTasks() {
-    this.searchInput
-      .valueChanges
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(value => {
-        if (!value.toString().toLowerCase().trim()) {
-          return this.tasks = this.formArray.controls;
-        } else {
-          return this.tasks = this.formArray.controls.filter(task => {
-            return task.get('title').value.toString().indexOf(value.toString()) !== -1;
-          });
-        }
-      });
-
-  }
 }
