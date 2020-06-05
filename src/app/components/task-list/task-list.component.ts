@@ -16,7 +16,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   // variables
   tasks: AbstractControl[];
   // spinner
-  loading: BehaviorSubject<boolean> = this.spinnerService.visibility ;
+  loading: BehaviorSubject<boolean> = this.spinnerService.visibility;
   // forms
   searchInput = new FormControl('');
   formArray = new FormArray([]);
@@ -30,7 +30,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   constructor(private tasksService: TasksService,
               private fb: FormBuilder,
-              public spinnerService: SpinnerService) {
+              private spinnerService: SpinnerService) {
   }
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe))
       .subscribe(
         response => {
-          this.tasks[i].get('completed').value = !this.tasks[i].get('completed').value;
+          this.tasks[i].get('completed').setValue(!this.tasks[i].get('completed').value);
         }, err => console.log(err));
   }
 
@@ -110,7 +110,15 @@ export class TaskListComponent implements OnInit, OnDestroy {
       }, err => console.log(err));
   }
 
-  onEdit(i: number) {
+  onEdit(task: FormGroup, i: number) {
+    if (this.tasks[i].get('title').disabled) {
+      this.onStartEdit(i);
+    } else {
+      this.onFinishEdit(task, i);
+    }
+  }
+
+  onStartEdit(i: number) {
     this.tasks[i].enable();
   }
 
@@ -124,6 +132,10 @@ export class TaskListComponent implements OnInit, OnDestroy {
           this.tasks[i].get('title').disable();
           this.tasks[i].get('date').disable();
         }, err => console.log(err));
+  }
+
+  editState(i: number) {
+    return this.tasks[i].get('title').disabled ? 'edit' : 'done';
   }
 
   taskState(value: boolean): string {

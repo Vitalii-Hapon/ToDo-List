@@ -76,10 +76,6 @@ h1 {
   border-radius: 10px;
   padding: 0 10px;
 
-  &:active {
-    background-color: $darkColor;
-  }
-
   &:enabled {
     background-color: lighten($tasksContainerColor, 50%);
   }

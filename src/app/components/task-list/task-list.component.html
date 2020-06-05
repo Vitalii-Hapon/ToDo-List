@@ -69,17 +69,23 @@
              formControlName="date"
              [class.item__input--completed]="task.value.completed">
 
-      <button class="refactors-button refactors-button--complete-edit-button"
+      <button class="refactors-button"
               type="submit"
-              (click)="onFinishEdit(task, i)">
-        <i class="material-icons">done</i>
+              (click)="onEdit(task, i)">
+        <i class="material-icons">{{editState(i)}}</i>
       </button>
 
-      <button class="refactors-button refactors-button--edit-button"
-              type="button"
-              (click)="onEdit(i)">
-        <i class="material-icons">edit</i>
-      </button>
+      <!--<button class="refactors-button refactors-button&#45;&#45;complete-edit-button"-->
+              <!--type="submit"-->
+              <!--(click)="onFinishEdit(task, i)">-->
+        <!--<i class="material-icons">done</i>-->
+      <!--</button>-->
+
+      <!--<button class="refactors-button refactors-button&#45;&#45;edit-button"-->
+              <!--type="button"-->
+              <!--(click)="onStartEdit(i)">-->
+        <!--<i class="material-icons">edit</i>-->
+      <!--</button>-->
 
       <button class="refactors-button"
               type="button"

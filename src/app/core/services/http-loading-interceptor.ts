@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class HttpLoadingInterceptor implements HttpInterceptor {
-  constructor(public spinnerService: SpinnerService) {
+  constructor(private spinnerService: SpinnerService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
