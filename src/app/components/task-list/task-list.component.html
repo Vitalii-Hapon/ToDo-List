@@ -2,12 +2,12 @@
 
 <div class="task-list__item">
 
-  <fa-icon [icon]="faSearch"></fa-icon>
+  <i class="material-icons">search</i>
 
   <input class="item__input input--search"
          type="text"
          placeholder="type text..."
-        [formControl]="searchInput">
+         [formControl]="searchInput">
 
 </div>
 
@@ -33,8 +33,7 @@
           type="submit"
           (click)="onAddTask(newTaskInput)"
           [disabled]="newTaskInput.invalid">
-    <fa-icon [icon]="faPlus">
-    </fa-icon>
+    <i class="material-icons">add</i>
   </button>
 
 </form>
@@ -49,45 +48,43 @@
         [class.task-list__item--completed]="task.value.completed">
 
       <label class="item__check-icon-folder"
-             (click)="toggleComplete(task)">
+             (click)="toggleComplete(task, i)">
 
-        <input class="item__checkbox"
-               type="checkbox"
-               formControlName="completed">
+        <!--<input class="item__checkbox"-->
+        <!--type="checkbox"-->
+        <!--formControlName="completed">-->
 
-        <fa-icon [icon]="taskState(task.value.completed)">
-
-        </fa-icon>
+        <i class="material-icons">{{taskState(task.value.completed)}}
+        </i>
 
       </label>
 
       <input type="text"
              class="item__input"
-             formControlName="title">
+             formControlName="title"
+             [class.item__input--completed]="task.value.completed">
 
       <input type="date"
              class="item__input item__input--date"
-             formControlName="date">
+             formControlName="date"
+             [class.item__input--completed]="task.value.completed">
 
       <button class="refactors-button refactors-button--complete-edit-button"
               type="submit"
               (click)="onFinishEdit(task, i)">
-        <fa-icon [icon]="faComplete">
-        </fa-icon>
+        <i class="material-icons">done</i>
       </button>
 
       <button class="refactors-button refactors-button--edit-button"
               type="button"
               (click)="onEdit(i)">
-        <fa-icon [icon]="faEdit">
-        </fa-icon>
+        <i class="material-icons">edit</i>
       </button>
 
       <button class="refactors-button"
               type="button"
               (click)="onDelete(task, i)">
-        <fa-icon [icon]="faDelete">
-        </fa-icon>
+        <i class="material-icons">delete_outline</i>
       </button>
     </li>
 

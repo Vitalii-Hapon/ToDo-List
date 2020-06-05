@@ -44,10 +44,6 @@ h1 {
   }
 }
 
-.task-list__item--completed {
-  text-decoration: line-through;
-}
-
 .item__check-icon-folder {
   display: flex;
   align-items: center;
@@ -87,6 +83,11 @@ h1 {
   &:enabled {
     background-color: lighten($tasksContainerColor, 50%);
   }
+}
+
+
+.item__input--completed {
+  text-decoration: line-through;
 }
 
 .item__input--date {

@@ -1,9 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {faCheckCircle, faCircle, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
-import {faEdit} from '@fortawesome/free-regular-svg-icons/faEdit';
 import {TasksService} from '../../core/services/tasks.service';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {faCheck, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {delay, map, takeUntil} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
 import {BehaviorSubject, Subject} from 'rxjs';
@@ -16,14 +13,6 @@ import {SpinnerService} from '../../core/services/spinner.service';
 })
 
 export class TaskListComponent implements OnInit, OnDestroy {
-  // import font awesome icons
-  faSearch = faSearch;
-  faNoCheck = faCircle;
-  faCheck = faCheckCircle;
-  faEdit = faEdit;
-  faDelete = faTrashAlt;
-  faPlus = faPlus;
-  faComplete = faCheck;
   // variables
   tasks: AbstractControl[];
   // spinner
@@ -86,13 +75,14 @@ export class TaskListComponent implements OnInit, OnDestroy {
       });
   }
 
-  toggleComplete(task: FormGroup) {
+  toggleComplete(task: FormGroup, i: number) {
     this.tasksService
       .toggleCompleted(task.getRawValue())
       .pipe(
         takeUntil(this.ngUnsubscribe))
       .subscribe(
         response => {
+          this.tasks[i].get('completed').value = !this.tasks[i].get('completed').value;
         }, err => console.log(err));
   }
 
@@ -103,9 +93,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe))
       .subscribe(
         taskResponse => {
-          this.formArray.push(this.newTaskGroup(taskResponse));
+          this.tasks.push(this.newTaskGroup(taskResponse));
           this.newTaskInput.reset();
-          this.tasks = this.formArray.controls;
         }, err => console.log(err));
   }
 
@@ -115,14 +104,14 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.ngUnsubscribe))
       .subscribe(response => {
-        this.tasks = this.formArray.controls.filter(
+        this.tasks = this.tasks.filter(
           (item, idx) => idx !== i
         );
       }, err => console.log(err));
   }
 
   onEdit(i: number) {
-    this.formArray.controls[i].enable();
+    this.tasks[i].enable();
   }
 
   onFinishEdit(task: FormGroup, i) {
@@ -132,13 +121,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         response => {
-          this.formArray.controls[i].get('title').disable();
-          this.formArray.controls[i].get('date').disable();
+          this.tasks[i].get('title').disable();
+          this.tasks[i].get('date').disable();
         }, err => console.log(err));
   }
 
-  taskState(value: boolean): any {
-    return value ? this.faCheck : this.faNoCheck;
+  taskState(value: boolean): string {
+    return value ? 'check_circle_outline' : 'radio_button_unchecked';
   }
 
 }
