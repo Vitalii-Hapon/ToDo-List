@@ -1,6 +1,5 @@
 <h1> ToDO list</h1>
 
-
 <div class="task-list__item">
 
   <fa-icon [icon]="faSearch"></fa-icon>
@@ -40,9 +39,9 @@
 
 </form>
 
-<ul class="task-list" *ngIf="!loading; else Loading">
+<ul class="task-list" *ngIf="!(loading | async); else Loading">
 
-  <ng-container *ngIf="formArray.length; else noTasks">
+  <ng-container *ngIf="tasks; else noTasks">
 
     <li class="task-list__item"
         *ngFor="let task of tasks | filter: searchInput.value; let i = index"
