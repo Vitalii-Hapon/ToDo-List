@@ -13,6 +13,8 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { FilterPipe } from './shared/pipes/filter.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {HttpLoadingInterceptor} from './core/services/http-loading-interceptor';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -36,6 +38,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [INTERCEPTOR_PROVIDER],
   bootstrap: [AppComponent]
