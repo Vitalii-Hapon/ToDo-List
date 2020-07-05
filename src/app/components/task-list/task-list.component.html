@@ -22,9 +22,11 @@
          type="date"
          formControlName="date">
 
-  <!--<mat-form-field>-->
-  <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date" type="date">-->
-  <!--<mat-datepicker #picker></mat-datepicker>-->
+  <!--<mat-form-field appearance="fill">-->
+    <!--<mat-label>Custom calendar header</mat-label>-->
+    <!--<input matInput [matDatepicker]="picker" formControlName="date">-->
+    <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+    <!--<mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>-->
   <!--</mat-form-field>-->
 
   <!--<button mat-raised-button (click)="picker.open()">Open</button>-->
@@ -50,10 +52,6 @@
       <label class="item__check-icon-folder"
              (click)="toggleComplete(task, i)">
 
-        <!--<input class="item__checkbox"-->
-        <!--type="checkbox"-->
-        <!--formControlName="completed">-->
-
         <i class="material-icons">{{taskState(task.value.completed)}}
         </i>
 
@@ -75,18 +73,6 @@
         <i class="material-icons">{{editState(i)}}</i>
       </button>
 
-      <!--<button class="refactors-button refactors-button&#45;&#45;complete-edit-button"-->
-              <!--type="submit"-->
-              <!--(click)="onFinishEdit(task, i)">-->
-        <!--<i class="material-icons">done</i>-->
-      <!--</button>-->
-
-      <!--<button class="refactors-button refactors-button&#45;&#45;edit-button"-->
-              <!--type="button"-->
-              <!--(click)="onStartEdit(i)">-->
-        <!--<i class="material-icons">edit</i>-->
-      <!--</button>-->
-
       <button class="refactors-button"
               type="button"
               (click)="onDelete(task, i)">
@@ -98,7 +84,7 @@
 </ul>
 
 <ng-template #Loading class="no-list-paragraph">
-  <mat-spinner></mat-spinner>
+  <mat-spinner [color]="color"></mat-spinner>
   <h3>Loading...</h3>
 </ng-template>
 

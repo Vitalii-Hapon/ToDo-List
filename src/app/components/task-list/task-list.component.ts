@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TasksService} from '../../core/services/tasks.service';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {delay, map, takeUntil} from 'rxjs/operators';
+import {delay, takeUntil} from 'rxjs/operators';
 import {ITask} from '../../core/models/task-model';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {SpinnerService} from '../../core/services/spinner.service';
@@ -15,6 +15,7 @@ import {SpinnerService} from '../../core/services/spinner.service';
 export class TaskListComponent implements OnInit, OnDestroy {
   // variables
   tasks: AbstractControl[];
+  color = 'warn';
   // spinner
   loading: BehaviorSubject<boolean> = this.spinnerService.visibility;
   // forms
@@ -83,7 +84,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.tasks[i].get('completed').setValue(!this.tasks[i].get('completed').value);
-        }, err => console.log(err));
+        }, err => console.log(  err));
   }
 
   onAddTask(task: FormGroup) {
